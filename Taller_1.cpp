@@ -17,13 +17,13 @@ int mostrarNodos(){
     int cont=1;
     for(aux=cab; aux!=NULL; aux=aux->sig){
         cout<< "                PRODUCTO  # "<< cont <<endl;
-        cout<< "############################################"<<endl;
+        cout<< "#######################################################################"<<endl;
         cout<< " Codigo Del Producto = " <<aux->codigo << " = Ubicacion En Memoria = "<< aux <<endl;
         cout<< " Nombre Del Producto = " <<aux->valor << " = Ubicacion En Memoria = "<< aux <<endl;
         cout<< " Cantidad Del Producto = " <<aux->cantidad << " = Ubicacion En Memoria = "<< aux <<endl;
         cout<< " Precio Del Producto = " <<aux->precio << " = Ubicacion En Memoria = "<< aux <<endl;
         cout<< " Valor De la Cantidad de Productos = " <<aux->TotalCosto << " = Ubicacion En Memoria = "<< aux <<endl;
-        cout<< "############################################"<<endl;
+        cout<< "#######################################################################"<<endl;
         cont++;       
     }
     
