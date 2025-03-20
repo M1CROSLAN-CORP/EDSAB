@@ -1,0 +1,27 @@
+**************************************
+SUBIR ARCHIVOS A MI SERVIDOR GITHUB **
+**************************************
+git init
+git add .
+(primera vez configurar user name y email)
+(git config --global user.name "M1CROSLAN-CORP")
+(git config --global user.email "anthonycaicedocongolino444@gmail.com")
+git commit -m "Adelanto Taller Para Presentar El Sabado"
+git branch -M main
+git remote add origin https://github.com/M1CROSLAN-CORP/EDSAB.git
+git push -u origin main
+
+token
+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
+
+****************************************
+CLONAR REPOSITORIO                   **
+****************************************
+1 git init
+2 git clone https://github.com/ProfeLucio/EDSaba2025-1.git
+
+****************************************
+COMPILAR ARCHIVO CPP                  **
+****************************************
+G++ Y NOMBRE DEL ARCHIVO CON EXTENCION
+G++ FIFO.CPP
