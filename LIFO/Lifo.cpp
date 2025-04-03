@@ -30,17 +30,31 @@ int mostrarNodos(){
     }
 }
 
+int eliminarNodo(){
+    if(top==NULL){
+      printf("No Hay Nodos A Eliminar:\n");
+    }else{
+        aux2 = top;
+        top = top->sig;
+        printf("Se ha Eliminado el Nodo: %d\n", aux2->valor); 
+        free(aux2);
+    }
+    
+}
+
 int main(){
     int opc;
     do {
         printf("1. Registrar Nodo\n");
         printf("2. Mostrar Nodos\n");
-        printf("3. Salir\n");
+        printf("3. Eliminar Nodos\n");
+        printf("4. Salir\n");
         scanf("%d", &opc);
         switch (opc)
         {
             case 1: crearNodo(); break;
             case 2: mostrarNodos(); break;
+            case 3: eliminarNodo(); break;
         }
-    }while(opc!=3);
+    }while(opc!=4);
 }
