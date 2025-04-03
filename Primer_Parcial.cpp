@@ -150,7 +150,7 @@ int Participacion(){
              cout<< " El Jugador " << aux->nombre <<" Ha Quedado Registrado Para participar "<<endl<<endl;
              CantidadJugadores--;
              contarP++;
-
+             contarJ--;
               if(toP==NULL){
                 toP = auxP;
                 toP->sig = NULL;
@@ -180,18 +180,52 @@ int Participacion(){
                  cab = cab->sig;
                  free(temp);
                  CantidadJugadores--;
+                 contarP--;
               }else{
                  cout<<" No Se Elimino El Jugador "<<endl;
                  opc=1;
               }
            }
         }
-    }
-    
-    
+    }   
+}
 
-    
-    
+int deshacerParticipacion(){
+    if (toP==NULL) {
+        cout<<" No Hay Participaciones Para Deshacer "<<endl;
+    }else{
+        aux2P = toP;
+        toP = toP->sig;        
+        contarP--;        
+              
+        cout<< aux2P->id_cedula_P << aux2P->nombre_P << aux2P->edad_P << aux2P->genero_P << aux2P->deporte_P <<endl;
+
+        aux = ((struct jugadores *) malloc(sizeof(struct jugadores)));            
+            strcpy(aux->nombre, aux2P->nombre_P);
+            strcpy(aux->deporte, aux2P->deporte_P);
+            aux->id_cedula = aux2P->id_cedula_P;
+            aux->edad = aux2P->edad_P;
+            aux->genero = aux2P->genero_P;
+            aux->sig = NULL;
+
+            if(cab==NULL){
+                cab = aux;
+            } else {
+                ultimo = cab;
+                while(ultimo->sig!=NULL){
+                    ultimo = ultimo->sig;
+                }
+                ultimo->sig = aux;
+                ultimo = NULL;
+                free(ultimo);
+            }    
+            aux = NULL;
+            free(aux);
+            CantidadJugadores++;
+            contarJ++;
+            cout<<" La participacion Del Jugador "<< aux2P->nombre_P << " A Sido Eliminada y Queda En La Cola De Espera FIFO"<<endl;
+            free(aux2P);
+    }
 }
 
 int main(){
@@ -212,7 +246,7 @@ int main(){
             case 3: MostrarCantidadJugadores(); break;
             case 4: Participacion(); break;
             case 5: MostrarHistorial(); break;
-            case 6: ; break;
+            case 6: deshacerParticipacion(); break;
             //default: cout<<"Opcion Incorrecta Marque una Opcion De 1 Hasta 6 "<<endl;
         }
     }while(opc!=7);
