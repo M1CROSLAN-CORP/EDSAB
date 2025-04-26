@@ -56,12 +56,17 @@ int main(){
     do{
         cout<<"1. Registrar Una Nueva Pelicula"<<endl;
         cout<<"2. Buscar Una Pelicula Por Nombre"<<endl;
-        cout<<"3. Salir"<<endl;
+        cout<<"3. Buscar Peliculas Por Genero"<<endl;
+        cout<<"4. Mostrar los 3 Fracasos Taquilleros"<<endl;
+        cout<<"5. Mostrar Arbol En Inorden"<<endl;
+        cout<<"6. Mostrar Arbol En Preorden"<<endl;
+        cout<<"7. Mostrar Arbol En Posorden"<<endl;
+        cout<<"8. Salir Del Sistema"<<endl;
         cout<<"Su opcion es:"<<endl;
         cin>>opcion;
         switch(opcion){
             case 1: registrar(); break;
             case 2: mostrar(raiz); break;
         };
-    }while(opcion!=3);
+    }while(opcion!=8);
 }
