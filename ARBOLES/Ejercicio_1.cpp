@@ -10,7 +10,7 @@ struct nodo {
 struct nodo *raiz, *aux;
 
 void posicionar(struct nodo *nuevaraiz){
-    if(aux->valor<nuevaraiz->valor){
+    if(aux->valor<nuevaraiz->valor || aux->valor==nuevaraiz->valor){
         if(nuevaraiz->izq==NULL){
             nuevaraiz->izq = aux;
         } else {
@@ -39,11 +39,27 @@ int registrar(){
     free(aux);
 }
 //Pre Orden - In Orden - Pos Orden
-int mostrar(struct nodo *nuevaraiz){
+int mostrarPRE(struct nodo *nuevaraiz){
     if(nuevaraiz!=NULL){
         cout<<"Valor: "<<nuevaraiz->valor<<endl;        
-        mostrar(nuevaraiz->izq);
-        mostrar(nuevaraiz->der);
+        mostrarPRE(nuevaraiz->izq);
+        mostrarPRE(nuevaraiz->der);
+    }
+}
+
+int mostrarIn(struct nodo *nuevaraiz){
+    if(nuevaraiz!=NULL){        
+        mostrarIn(nuevaraiz->izq);
+        cout<<"Valor: "<<nuevaraiz->valor<<endl;
+        mostrarIn(nuevaraiz->der);
+    }
+}
+
+int mostrarPost(struct nodo *nuevaraiz){
+    if(nuevaraiz!=NULL){        
+        mostrarPost(nuevaraiz->izq);
+        mostrarPost(nuevaraiz->der);
+        cout<<"Valor: "<<nuevaraiz->valor<<endl;
     }
 }
 
@@ -51,13 +67,17 @@ int main(){
     int opcion;
     do{
         cout<<"1. Registrar"<<endl;
-        cout<<"2. Mostrar"<<endl;
-        cout<<"3. Salir"<<endl;
+        cout<<"2. MostrarPRE"<<endl;
+        cout<<"3. MostrarPost"<<endl;
+        cout<<"4. MostrarIn"<<endl;
+        cout<<"5. Salir"<<endl;
         cout<<"Su opcion es:"<<endl;
         cin>>opcion;
         switch(opcion){
             case 1: registrar(); break;
-            case 2: mostrar(raiz); break;
+            case 2: mostrarPRE(raiz); break;
+            case 3: mostrarPost(raiz); break;
+            case 4: mostrarIn(raiz); break;
         };
-    }while(opcion!=3);
+    }while(opcion!=5);
 }
