@@ -16,7 +16,7 @@ struct cinemania *raiz, *aux;
 char BusquedaPorNombre[50];
 
 void posicionar(struct cinemania *nuevaraiz){
-    if(aux->ano_realizado<nuevaraiz->ano_realizado){
+    if(aux->ano_realizado<nuevaraiz->ano_realizado || aux->ano_realizado==nuevaraiz->ano_realizado){
         if(nuevaraiz->izq==NULL){
             nuevaraiz->izq = aux;
         } else {
@@ -76,34 +76,53 @@ int registrar(){
     free(aux);
 }
 //Pre Orden - In Orden - Pos Orden
-int mostrar(struct cinemania *nuevaraiz){
+int mostrarPreOrden(struct cinemania *nuevaraiz){
     if(nuevaraiz!=NULL){
         cout<<"Nombre Pelicula = "<<nuevaraiz->nombre_pelicula<<endl;
         cout<<"Ano De Estreno = "<<nuevaraiz->ano_realizado<<endl<<endl;        
-        mostrar(nuevaraiz->izq);
-        mostrar(nuevaraiz->der);
+        mostrarPreOrden(nuevaraiz->izq);
+        mostrarPreOrden(nuevaraiz->der);
+    }
+}
+
+int mostrarPostOrden(struct cinemania *nuevaraiz){
+    if(nuevaraiz!=NULL){        
+        mostrarPostOrden(nuevaraiz->izq);
+        mostrarPostOrden(nuevaraiz->der);
+        cout<<"Nombre Pelicula = "<<nuevaraiz->nombre_pelicula<<endl;
+        cout<<"Ano De Estreno = "<<nuevaraiz->ano_realizado<<endl<<endl;
+    }
+}
+
+int mostrarInOrden(struct cinemania *nuevaraiz){
+    if(nuevaraiz!=NULL){        
+        mostrarInOrden(nuevaraiz->izq);
+        cout<<"Nombre Pelicula = "<<nuevaraiz->nombre_pelicula<<endl;
+        cout<<"Ano De Estreno = "<<nuevaraiz->ano_realizado<<endl<<endl;
+        mostrarInOrden(nuevaraiz->der);
     }
 }
 
 int BuscarNombrePelicula(struct cinemania *buscar_raiz){
     if(strcmp(BusquedaPorNombre, "") == 0){
-      cout<<"Ingrese el Nombre De la Pelicula A Buscar";
+      cout<<"Ingrese el Nombre De la Pelicula A Buscar "<<endl;
       cin.ignore();  // Limpiar el buffer antes de usar getline
       cin.getline(BusquedaPorNombre, 50);  // Leer una línea completa, hasta 50 caracteres
     }                     
                       
     
     if(buscar_raiz!=NULL){
-        if(strcmp(BusquedaPorNombre, aux->nombre_pelicula) == 0){
+        if(strcmp(BusquedaPorNombre, buscar_raiz->nombre_pelicula) == 0){
             cout<<"Nombre Pelicula = "<<buscar_raiz->nombre_pelicula<<endl;
             cout<<"Ano De Estreno = "<<buscar_raiz->ano_realizado<<endl<<endl;
-            BuscarNombrePelicula(buscar_raiz->izq);
-            BuscarNombrePelicula(buscar_raiz->der);
+            strcpy(BusquedaPorNombre,"");
         }else{      
             BuscarNombrePelicula(buscar_raiz->izq);
             BuscarNombrePelicula(buscar_raiz->der);
         } 
     }
+
+        
 }
 
 
@@ -114,16 +133,18 @@ int main(){
         cout<<"2. Buscar Una Pelicula Por Nombre"<<endl;
         cout<<"3. Buscar Peliculas Por Genero"<<endl;
         cout<<"4. Mostrar los 3 Fracasos Taquilleros"<<endl;
-        cout<<"5. Mostrar Arbol En Inorden"<<endl;
-        cout<<"6. Mostrar Arbol En Preorden"<<endl;
-        cout<<"7. Mostrar Arbol En Posorden"<<endl;
+        cout<<"5. Mostrar Arbol En PRE-orden"<<endl;
+        cout<<"6. Mostrar Arbol En IN-orden"<<endl;
+        cout<<"7. Mostrar Arbol En POST-orden"<<endl;
         cout<<"8. Salir Del Sistema"<<endl;
         cout<<"Su opcion es:"<<endl;
         cin>>opcion;
         switch(opcion){
             case 1: registrar(); break;
             case 2: BuscarNombrePelicula(raiz); break;
-            case 5: mostrar(raiz); break;
+            case 5:{ cout<<"Mostrando Contenido En PRE - Orden "<<endl; mostrarPreOrden(raiz); break; }
+            case 6:{ cout<<"Mostrando Contenido En IN - Orden "<<endl; mostrarInOrden(raiz); break; }
+            case 7:{ cout<<"Mostrando Contenido En POST - Orden "<<endl; mostrarPostOrden(raiz); break; }
         };
     }while(opcion!=8);
 }
