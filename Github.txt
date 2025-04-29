@@ -9,6 +9,7 @@ git add .
 git commit -m "Adelanto Taller Para Presentar El Sabado"
 git branch -M main
 git remote add origin https://github.com/M1CROSLAN-CORP/EDSAB.git
+git mv Taller_1.cpp Taller_2.cpp = (Con este Comando se le Cambia el NOMBRE a un archivo )
 git push -u origin main
 
 token
