@@ -150,7 +150,7 @@ cinemania* buscarConPadre(cinemania *nuevaRaiz, cinemania **padre) {
      }
      aux = NULL;
      return NULL;
-    
+    // No ha subido al git hub
     /* 
     while (nuevaRaiz != NULL) {
         if (strcmp(BusquedaPorNombre, nuevaRaiz->nombre_pelicula) == 0) {
