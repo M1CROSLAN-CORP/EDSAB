@@ -137,35 +137,22 @@ int fracasostaquilleros(struct cinemania *buscar_raiz){
   cout<<"Los Tres Ultimos Fracasos Taquilleros"<<endl;
 }
 
-cinemania* buscarConPadre(cinemania *nuevaRaiz, cinemania **padre) {
-    *padre = NULL;
-     if(nuevaRaiz !=NULL){
-         if (strcmp(BusquedaPorNombre, nuevaRaiz->nombre_pelicula) == 0) {
-            aux = nuevaRaiz;            
-            return aux;
-         }
-         *padre = nuevaRaiz;
-         buscarConPadre(nuevaRaiz->izq, padre);
-         buscarConPadre(nuevaRaiz->der, padre);
-     }
-     aux = NULL;
-     return NULL;
-    // No ha subido al git hub
-    /* 
-    while (nuevaRaiz != NULL) {
-        if (strcmp(BusquedaPorNombre, nuevaRaiz->nombre_pelicula) == 0) {
+cinemania* buscarConPadre(cinemania *nuevaRaiz, char*eliminarP, cinemania **padre) {
+    if (nuevaRaiz == NULL) return NULL;
+
+    if (strcmp(eliminarP, nuevaRaiz->nombre_pelicula) == 0) {
             aux = nuevaRaiz;            
             return aux;
         }
-        *padre = nuevaRaiz;
-        if (clave < nuevaRaiz->ano_realizado)
-            nuevaRaiz = nuevaRaiz->izq;
-        else
-            nuevaRaiz = nuevaRaiz->der;
-    }
-    aux = NULL;
-    return NULL;
-    */
+    
+    // Buscar en el hijo izquierdo
+    *padre = nuevaRaiz;
+    cinemania* encontrado = buscarConPadre(nuevaRaiz->izq, eliminarP, padre);
+    if (encontrado != NULL) return encontrado;
+
+    // Buscar en el hijo derecho
+    *padre = nuevaRaiz;
+    return buscarConPadre(nuevaRaiz->der, eliminarP, padre);    
 }
 
 void eliminarPelicula() {
@@ -173,11 +160,16 @@ void eliminarPelicula() {
         cout << "El arbol está vacio.\n";
         return;
     }
+
+    char eliminarP[50];
+    cout << "Digite el Nombre De Pelicula a Eliminar: ";
+    cin.ignore();
+    cin.getline(eliminarP, 50);
     
     cinemania *padre = NULL;
-    buscarConPadre(raiz, &padre);
+    cinemania *aux = buscarConPadre(raiz, eliminarP, &padre);
     if (aux == NULL) {
-        cout << "La Pelicula Con Nombre " << BusquedaPorNombre << " no se ha encontrado.\n";
+        cout << "La Pelicula Con Nombre " << eliminarP << " no se ha encontrado.\n";
         return;
     }
 
@@ -223,12 +215,7 @@ int main(){
         cin>>opcion;
         switch(opcion){
             case 1: registrar(); break;
-            case 2:{
-                       strcpy(BusquedaPorNombre,"");
-                       cout<<"Ingrese el Nombre De la Pelicula A Buscar "<<endl;
-                       cin.ignore();
-                       cin.getline(BusquedaPorNombre, 50);  // Leer una línea completa, hasta 50 caracteres
-                       BuscarNombrePelicula(raiz); break;} 
+            case 2:{BuscarNombrePelicula(raiz); break;} 
             case 3:{
                         int opc=0;
                         cout<<"Seleccione El Genero Para Mostrar Peliculas"<<endl;    
@@ -252,12 +239,7 @@ int main(){
             case 5:{ cout<<"Mostrando Contenido En PRE - Orden "<<endl; mostrarPreOrden(raiz); break; }
             case 6:{ cout<<"Mostrando Contenido En IN - Orden "<<endl; mostrarInOrden(raiz); break; }
             case 7:{ cout<<"Mostrando Contenido En POST - Orden "<<endl; mostrarPostOrden(raiz); break; }
-            case 8:{
-                       strcpy(BusquedaPorNombre,"");
-                       cout<<"Ingrese el Nombre De la Pelicula A Buscar "<<endl;
-                       cin.ignore();
-                       cin.getline(BusquedaPorNombre, 50);  // Leer una línea completa, hasta 50 caracteres
-                       eliminarPelicula(); break;} 
+            case 8:{ eliminarPelicula(); break;} 
         };
     }while(opcion!=9);
 }
