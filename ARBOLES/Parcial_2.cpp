@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
+#include <windows.h>  // Necesario para SetConsoleOutputCP
 using namespace std;
 
 struct cinemania {
@@ -32,6 +33,18 @@ void posicionar(struct cinemania *nuevaraiz){
     }
 }
 
+bool existeAno(cinemania* raiz, int ano) {
+    if (raiz == NULL) return false;
+
+    if (ano == raiz->ano_realizado) {
+        return true;
+    } else if (ano < raiz->ano_realizado) {
+        return existeAno(raiz->izq, ano);
+    } else {
+        return existeAno(raiz->der, ano);
+    }
+}
+
 int registrar(){
     aux = ((struct cinemania *) malloc(sizeof(struct cinemania)));
     aux->izq = aux->der = NULL;
@@ -45,6 +58,12 @@ int registrar(){
 
     cout<<"Registre El Año En Que Se Realizo "<<endl;
     cin>>aux->ano_realizado;
+
+    if (existeAno(raiz, aux->ano_realizado)) {
+        cout << "Ya existe una película registrada con ese año. No se permite duplicados.\n";
+        free(aux);  // Liberar memoria si no se usará
+        return 0;   // Cancelar el registro
+    }
     
     cout<<"Registre El Genero De La Pelicula "<<endl;    
     do {
@@ -80,7 +99,7 @@ int registrar(){
 int mostrarPreOrden(struct cinemania *nuevaraiz){
     if(nuevaraiz!=NULL){
         cout<<"Nombre Pelicula = "<<nuevaraiz->nombre_pelicula<<endl;
-        cout<<"Ano De Estreno = "<<nuevaraiz->ano_realizado<<endl<<endl;        
+        cout<<"Año De Estreno = "<<nuevaraiz->ano_realizado<<endl<<endl;        
         mostrarPreOrden(nuevaraiz->izq);
         mostrarPreOrden(nuevaraiz->der);
     }
@@ -91,7 +110,7 @@ int mostrarPostOrden(struct cinemania *nuevaraiz){
         mostrarPostOrden(nuevaraiz->izq);
         mostrarPostOrden(nuevaraiz->der);
         cout<<"Nombre Pelicula = "<<nuevaraiz->nombre_pelicula<<endl;
-        cout<<"Ano De Estreno = "<<nuevaraiz->ano_realizado<<endl<<endl;
+        cout<<"Año De Estreno = "<<nuevaraiz->ano_realizado<<endl<<endl;
     }
 }
 
@@ -99,7 +118,7 @@ int mostrarInOrden(struct cinemania *nuevaraiz){
     if(nuevaraiz!=NULL){        
         mostrarInOrden(nuevaraiz->izq);
         cout<<"Nombre Pelicula = "<<nuevaraiz->nombre_pelicula<<endl;
-        cout<<"Ano De Estreno = "<<nuevaraiz->ano_realizado<<endl<<endl;
+        cout<<"Año De Estreno = "<<nuevaraiz->ano_realizado<<endl<<endl;
         mostrarInOrden(nuevaraiz->der);
     }
 }
@@ -108,7 +127,7 @@ int BuscarNombrePelicula(struct cinemania *buscar_raiz){
     if(buscar_raiz!=NULL){
         if(strcmp(BusquedaPorNombre, buscar_raiz->nombre_pelicula) == 0){
             cout<<"Nombre Pelicula = "<<buscar_raiz->nombre_pelicula<<endl;
-            cout<<"Ano De Estreno = "<<buscar_raiz->ano_realizado<<endl<<endl;
+            cout<<"Año De Estreno = "<<buscar_raiz->ano_realizado<<endl<<endl;
             BuscarNombrePelicula(buscar_raiz->izq);
             BuscarNombrePelicula(buscar_raiz->der);
         }else{      
@@ -122,7 +141,7 @@ int BuscarPeliculasPorGenero(struct cinemania *buscar_raiz){
     if(buscar_raiz!=NULL){   
         if(strcmp(BusquedaPorGenero, buscar_raiz->genero)==0){
             cout<<"Nombre Pelicula = "<<buscar_raiz->nombre_pelicula<<endl;
-            cout<<"Ano De Estreno = "<<buscar_raiz->ano_realizado<<endl;
+            cout<<"Año De Estreno = "<<buscar_raiz->ano_realizado<<endl;
             cout<<"Genero Pelicula = "<<buscar_raiz->genero<<endl<<endl;
             BuscarPeliculasPorGenero(buscar_raiz->izq);
             BuscarPeliculasPorGenero(buscar_raiz->der);
@@ -157,7 +176,7 @@ cinemania* buscarConPadre(cinemania *nuevaRaiz, char*eliminarP, cinemania **padr
 
 void eliminarPelicula() {
     if (raiz == NULL) {
-        cout << "El arbol está vacio.\n";
+        cout << "No Hay Peliculas Registradas En EL Sistema.\n";
         return;
     }
 
@@ -168,8 +187,9 @@ void eliminarPelicula() {
     
     cinemania *padre = NULL;
     cinemania *aux = buscarConPadre(raiz, eliminarP, &padre);
+
     if (aux == NULL) {
-        cout << "La Pelicula Con Nombre " << eliminarP << " no se ha encontrado.\n";
+        cout << "La Pelicula Con Nombre " << eliminarP << " No Se Ha Encontrado.\n";
         return;
     }
 
@@ -196,10 +216,11 @@ void eliminarPelicula() {
 
     free(aux);
     aux = NULL;
-    cout << "Nodo eliminado correctamente.\n";
+    cout << "Pelicula Eliminada Correctamente.\n";
 }
 
 int main(){
+    SetConsoleOutputCP(CP_UTF8);  // Configura la consola para UTF-8
     int opcion;
     do{
         cout<<"1. Registrar Una Nueva Pelicula "<<endl;
