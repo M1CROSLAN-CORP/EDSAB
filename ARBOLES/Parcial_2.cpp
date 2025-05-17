@@ -174,6 +174,13 @@ cinemania* buscarConPadre(cinemania *nuevaRaiz, char*eliminarP, cinemania **padr
     return buscarConPadre(nuevaRaiz->der, eliminarP, padre);    
 }
 
+cinemania* encontrarHijo(cinemania* aux2){
+  while(aux2->izq!= NULL){
+     aux2 = aux2->izq;
+  }
+  return aux2;
+}
+
 void eliminarPelicula() {
     if (raiz == NULL) {
         cout << "No Hay Peliculas Registradas En EL Sistema.\n";
@@ -195,7 +202,27 @@ void eliminarPelicula() {
 
     // Caso de dos hijos: no implementado
     if (aux->izq != NULL && aux->der != NULL) {
-        cout << "El nodo tiene dos hijos; este caso no esta implementado.\n";
+        cinemania* sucesor = encontrarHijo(aux->der);
+
+        strcpy(aux->nombre_pelicula,sucesor->nombre_pelicula);
+        aux->ano_realizado = sucesor->ano_realizado;
+        strcpy(aux->genero,sucesor->genero);
+        aux->dinero_recaudado = sucesor->dinero_recaudado;
+
+        cinemania *padreSucesor = aux;
+        cinemania *actual = aux->der;
+        while(actual->izq !=NULL){
+           padreSucesor = actual;
+           actual = actual->izq;
+        }
+        if (padreSucesor->izq == actual)
+            padreSucesor->izq = (actual->der != NULL) ? actual->der : NULL;
+        else
+            padreSucesor->der = (actual->der != NULL) ? actual->der : NULL;
+
+        free(actual);
+
+        cout << "La Pelicula Fue Eliminada Correctamente Del Arbol.\n"<<endl<<endl;
         return;
     }
 
