@@ -263,7 +263,12 @@ int main(){
         cin>>opcion;
         switch(opcion){
             case 1: registrar(); break;
-            case 2:{BuscarNombrePelicula(raiz); break;} 
+            case 2:{
+                       strcpy(BusquedaPorNombre,"");
+                       cout<<"Ingrese el Nombre De la Pelicula A Buscar "<<endl;
+                       cin.ignore();
+                       cin.getline(BusquedaPorNombre, 50);  // Leer una línea completa, hasta 50 caracteres
+                       BuscarNombrePelicula(raiz); break;} 
             case 3:{
                         int opc=0;
                         cout<<"Seleccione El Genero Para Mostrar Peliculas"<<endl;    
