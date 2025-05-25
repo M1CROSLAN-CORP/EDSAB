@@ -30,7 +30,9 @@ int alturaNodos(cinemania *altura){
  }
 }
 
-//int equilibrio
+int equilibrio (cinemania *nuevaraiz){
+    return alturaNodos(nuevaraiz->der) - alturaNodos(nuevaraiz->izq);
+}
 
 
 
@@ -111,9 +113,9 @@ int registrar(){
     } else {
         posicionar(raiz);
     }
-    int ad = alturaNodos(raiz);
+    int FactorEquilibrio = equilibrio(raiz);
     
-    cout<<"La Altura Derecha Es "<< ad <<endl;
+    cout<<" El Equilibrio Del Nodo Es "<< FactorEquilibrio <<endl;
     
     aux = NULL;
     free(aux);
