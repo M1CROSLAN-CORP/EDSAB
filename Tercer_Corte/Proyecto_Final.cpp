@@ -16,6 +16,30 @@ struct cinemania {
 struct cinemania *raiz, *aux;
 char BusquedaPorNombre[50],BusquedaPorGenero[50];
 
+cinemania* rotacionSimpleIzquierda(cinemania* peliculaNodo) {
+    cinemania* nuevaRaiz = peliculaNodo->der;
+    peliculaNodo->der = nuevaRaiz->izq;
+    nuevaRaiz->izq = peliculaNodo;
+    return nuevaRaiz;
+}
+
+cinemania* rotacionSimpleDerecha(cinemania* peliculaNodo) {
+    cinemania* nuevaRaiz = peliculaNodo->izq;
+    peliculaNodo->izq = nuevaRaiz->der;
+    nuevaRaiz->der = peliculaNodo;
+    return nuevaRaiz;
+}
+
+cinemania* rotacionDobleIzquierdaDerecha(cinemania* peliculaNodo) {
+    peliculaNodo->izq = rotacionSimpleIzquierda(peliculaNodo->izq);
+    return rotacionSimpleDerecha(peliculaNodo);
+}
+
+cinemania* rotacionDobleDerechaIzquierda(cinemania* peliculaNodo) {
+    peliculaNodo->der = rotacionSimpleDerecha(peliculaNodo->der);
+    return rotacionSimpleIzquierda(peliculaNodo);
+}
+
 int alturaNodos(cinemania *altura){
  if(altura!=NULL){
     int izquierda=alturaNodos(altura->izq);
@@ -34,24 +58,41 @@ int equilibrio (cinemania *nuevaraiz){
     return alturaNodos(nuevaraiz->der) - alturaNodos(nuevaraiz->izq);
 }
 
-
-
-void posicionar(struct cinemania *nuevaraiz){
-    //Si el Nuevo Año ingresado es menor o igual al año ya registrado va para la izquierda
-    if(aux->ano_realizado<nuevaraiz->ano_realizado || aux->ano_realizado==nuevaraiz->ano_realizado){ 
-        if(nuevaraiz->izq==NULL){
-            nuevaraiz->izq = aux;
-        } else {
-            posicionar(nuevaraiz->izq);
-        }
-    } else {
-        if(nuevaraiz->der==NULL){
-            nuevaraiz->der = aux;
-        } else {
-            posicionar(nuevaraiz->der);
-        }
+cinemania* posicionar(cinemania* nodo, cinemania* nuevaPelicula){
+    if (nodo == NULL) {
+        return nuevaPelicula;
     }
-    
+
+    if (nuevaPelicula->ano_realizado < nodo->ano_realizado) {
+        nodo->izq = posicionar(nodo->izq, nuevaPelicula);
+    } else {
+        nodo->der = posicionar(nodo->der, nuevaPelicula);
+    }
+
+    // Calcular factor de equilibrio
+    int fe = equilibrio(nodo);
+
+    // Rotación simple a la derecha
+    if (fe < -1 && nuevaPelicula->ano_realizado < nodo->izq->ano_realizado) {
+        return rotacionSimpleDerecha(nodo);
+    }
+
+    // Rotación simple a la izquierda
+    if (fe > 1 && nuevaPelicula->ano_realizado > nodo->der->ano_realizado) {
+        return rotacionSimpleIzquierda(nodo);
+    }
+
+    // Rotación doble izquierda-derecha
+    if (fe < -1 && nuevaPelicula->ano_realizado > nodo->izq->ano_realizado) {
+        return rotacionDobleIzquierdaDerecha(nodo);
+    }
+
+    // Rotación doble derecha-izquierda
+    if (fe > 1 && nuevaPelicula->ano_realizado < nodo->der->ano_realizado) {
+        return rotacionDobleDerechaIzquierda(nodo);
+    }
+
+    return nodo;
 }
 
 bool existeAno(cinemania* raiz, int ano) {
@@ -111,7 +152,7 @@ int registrar(){
     if(raiz==NULL){
         raiz = aux;        
     } else {
-        posicionar(raiz);
+        posicionar(raiz,aux);
     }
     int FactorEquilibrio = equilibrio(raiz);
     
